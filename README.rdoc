@@ -1,28 +1,64 @@
 == README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+<h3>User flow:</h3>
 
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+User Interaction webpage ->
 
 
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+	Thank you for your interest in [Non-Profit Name]
+
+	Please provide us with your Social Information so that we can send you
+	further information regarding your pledge
+
+	Pledge Amount: $_._
+
+	[Facebook | Possibly -> (Twitter | Google+ | Tumblr | Linkedin)]
+
+
+Social Authentication ->
+	Request to create new user in (Sending Account info + pledge amount)
+		Get Existing user info
+		or
+		Get New user Info
+
+Display Returned user info
+New:
+
+	Thank you.
+
+	Your pledge makes a difference. With your donation of $_._ we would able to [ goal ].
+
+Existing:
+
+	Thank you, once more.
+
+	With your continued pledges you are a core member of our [group of non-profits].
+
+	You have generously pledged [$x] this year.
+
+End
+
+
+
+<h3>Model Setup:</h3>
+
+Middle tier between Civic Data CRM and Social Providers
+
+Consumer -> General data about user
+	id, CRM id
+
+	Methods:
+		short_to_long_token_conversion
+		send_pledge
+			Data From CRM:
+				view
+				index
+
+Provider -> Social Provider specific details
+	id, token, social_data
+
+Scheduled groups
+	id, schedule_id
+
+Scheduled Notifications
+	id, provider_id, start_date, end_date, ongoing, frequency, message_content
