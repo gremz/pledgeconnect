@@ -1,10 +1,15 @@
+require 'net/http'
+
 class ConsumersController < ApplicationController
   before_action :set_consumer, only: [:show, :edit, :update, :destroy]
 
   # GET /consumers
   # GET /consumers.json
   def index
-    @consumers = Consumer.all
+    # Normally a request for data would be made
+    #@results = Net::HTTP.get(URI.parse('/assets/sample_users.json'))
+    @results = File.read(Rails.root.join("app", "assets", "sample_users.json"))
+    @results = JSON.parse(@results)
   end
 
   # GET /consumers/1
@@ -61,11 +66,29 @@ class ConsumersController < ApplicationController
     end
   end
 
-  def new_pledge
-
-  end
-
   def submit_pledge
+    if (params[:social_data] && params[:token])
+      social_data = JSON.parse(params[:social_data])
+      email_exists = does_email_exist(social_data["email"])
+      if email_exists
+        provider = Provider.new(:token => params[:token], :social_data => params[:social_data])
+        accountTotal = "335.85"
+      else
+        consumer = Consumer.new(:crm_id => "25")
+        provider = Provider.new(:token => params[:token], :social_data => params[:social_data])
+      end
+    end
+
+    if consumer && consumer.save
+    else
+      #render json: {:statusMessage => "Could not save user" }, status: 400
+    end
+
+    if provider && provider.save
+        render json: {:data => {:accountTotal => (accountTotal || '') }}
+    else
+        render json: {:statusMessage => "Could not save provider" }, status: 400
+    end
 
   end
 
@@ -78,5 +101,22 @@ class ConsumersController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def consumer_params
       params.require(:consumer).permit(:crm_id)
+    end
+
+    def short_to_long_token_conversion
+
+    end
+
+    def does_email_exist(email)
+      @results = File.read(Rails.root.join("app", "assets", "sample_users.json"))
+      @results = JSON.parse(@results)
+      matched = false
+
+      @results.each do |consumer|
+        if consumer[1]["email"] == email
+          matched = consumer
+        end
+      end
+      return matched
     end
 end

@@ -1,23 +1,28 @@
 <h1>Listing consumers</h1>
 
-<table>
+<table class="table table-hover">
   <thead>
     <tr>
-      <th>Crm</th>
-      <th></th>
-      <th></th>
-      <th></th>
+      <th>Full Name</th>
+      <th>Phone</th>
+      <th>Email</th>
+      <th>Address</th>
     </tr>
   </thead>
 
   <tbody>
-    <% @consumers.each do |consumer| %>
-      <tr>
-        <td><%= consumer.crm_id %></td>
-        <td><%= link_to 'Show', consumer %></td>
-        <td><%= link_to 'Edit', edit_consumer_path(consumer) %></td>
-        <td><%= link_to 'Destroy', consumer, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
+    <% @results.each do |consumer| %>
+    <tr>
+      <td><%= consumer[1]["display_name"] %></td>
+      <td><%= consumer[1]["phone"] %></td>
+      <td><%= consumer[1]["email"] %></td>
+      <% if consumer[1]["street_address"].length != 0 && consumer[1]["city"] != 0 && consumer[1]["state_province"] != 0 %>
+        <td><%= consumer[1]["street_address"] %>, <%= consumer[1]["city"] %>, <%= consumer[1]["state_province"] %></td>
+      <% else %>
+        <td></td>
+      <% end %>
+    </tr>
+
     <% end %>
   </tbody>
 </table>

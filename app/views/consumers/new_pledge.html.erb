@@ -55,39 +55,12 @@
   <div class="container">
     <div class="row">
       <div class="col-md-4 col-md-offset-4 text-center">
-        <h2>Our Services</h2>
+        <h2>Your Pledge has been submitted</h2>
         <hr>
       </div>
     </div>
     <div class="row">
-      <div class="col-md-2 col-md-offset-2 text-center">
-        <div class="service-item">
-          <i class="service-icon fa fa-rocket"></i>
-          <h4>Spacecraft Repair</h4>
-          <p>Did your navigation system shut down in the middle of that asteroid field? We can repair any dings and scrapes to your spacecraft!</p>
-        </div>
-      </div>
-      <div class="col-md-2 text-center">
-        <div class="service-item">
-          <i class="service-icon fa fa-magnet"></i>
-          <h4>Problem Solving</h4>
-          <p>Need to know how magnets work? Our problem solving solutions team can help you identify problems and conduct exploratory research.</p>
-        </div>
-      </div>
-      <div class="col-md-2 text-center">
-        <div class="service-item">
-          <i class="service-icon fa fa-shield"></i>
-          <h4>Blacksmithing</h4>
-          <p>Planning a time travel trip to the middle ages? Preserve the space time continuum by blending in with period accurate armor and weapons.</p>
-        </div>
-      </div>
-      <div class="col-md-2 text-center">
-        <div class="service-item">
-          <i class="service-icon fa fa-pencil"></i>
-          <h4>Pencil Sharpening</h4>
-          <p>We've been voted the best pencil sharpening service for 10 consecutive years. If you have a pencil that feels dull, we'll get it sharp!</p>
-        </div>
-      </div>
+      <div class="holder col-md-6 col-md-offset-3 text-center"></div>
     </div>
   </div>
 </div>
@@ -106,10 +79,6 @@
   </div>
 </footer>
 <!-- /Footer -->
-
-<!-- JavaScript -->
-<script src="js/jquery-1.10.2.js"></script>
-<script src="js/bootstrap.js"></script>
 
 <!-- Custom JavaScript for the Side Menu and Smooth Scrolling -->
 <script>
@@ -162,19 +131,30 @@
     $(function() {
         $(".btn-facebook").click(function() {
             if ($(".publish-to-profile").prop("checked")) {
-                var displayAmount = $(".publish-amount-to-profile").is(":checked") && $("#pledgeAmount").val() || ""
-                console.log("displayAmount", displayAmount)
+                var displayAmount = $(".publish-amount-to-profile").is(":checked") && $("#pledgeAmount").val() || "";
+
                 FB.login(function(){
-                    FB.api('/me/feed', 'post', {message: 'I am awesome for pledging' + (displayAmount ? ' $' + displayAmount : '') + '!' });
+                    FB.api('/me/feed', 'post', {message: 'I am awesome for pledging' + (displayAmount ? ' $' + displayAmount : '') + '!' },
+                    function(response) {
+                        FB.getLoginStatus(function(response) {
+                            if(response.status == "connected") {
+                                getUserData(response.authResponse.accessToken);
+                            } else {
+                                FB.login(function(){
+                                    getUserData(response.authResponse.accessToken);
+                                }, {scope: 'email'});
+                            }
+                        });
+                    });
                 }, {scope: 'publish_actions,email'});
             }
 
             FB.getLoginStatus(function(response) {
                 if(response.status == "connected") {
-                    getUserData();
+                    getUserData(response.authResponse.accessToken);
                 } else {
                     FB.login(function(){
-                        getUserData();
+                        getUserData(response.authResponse.accessToken);
                     }, {scope: 'email'});
                 }
             });
@@ -186,19 +166,29 @@
         })
 
         // Core functions
-        function getUserData() {
+        function getUserData(access_token) {
             FB.api('/me', function(response) {
                 if (response && !response.error) {
-                    console.log(response);
+                    console.log(response, access_token);
+                    storeData(JSON.stringify(response), access_token);
                 }
             })
         }
 
-        function storeData() {
-
+        function storeData(social_data, token) {
+            $.get("http://e9f3b7a.ngrok.com/consumers/submit_pledge?token=" + encodeURIComponent(token) + "&social_data=" + encodeURIComponent(social_data))
+                    .done(function(data, textStatus, jqXHR) {
+                        finishedAnimation(data);
+                    })
+                    .fail(function( jqXHR, textStatus, errorThrown) {
+                        console.log(textStatus);
+                    })
         }
 
-        asd=function finishedAnimation() {
+        function finishedAnimation(data) {
+            $(".header.finished .holder").append("<p class='lead sub' >With your continued pledges you are a core member of our organization.");
+            if (data) $(".header.finished .holder").append("<p class='lead sub'>You have donated a total of <b>$" + $("#pledgeAmount").val() + "</b></p>");
+
             $(".header").first().hide();
             $(".header.finished").slideDown();
         }
