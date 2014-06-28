@@ -1,0 +1,41 @@
+<%= form_for(@scheduled_notification) do |f| %>
+  <% if @scheduled_notification.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@scheduled_notification.errors.count, "error") %> prohibited this scheduled_notification from being saved:</h2>
+
+      <ul>
+      <% @scheduled_notification.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :provider_id %><br>
+    <%= f.number_field :provider_id %>
+  </div>
+  <div class="field">
+    <%= f.label :start_date %><br>
+    <%= f.datetime_select :start_date %>
+  </div>
+  <div class="field">
+    <%= f.label :end_date %><br>
+    <%= f.datetime_select :end_date %>
+  </div>
+  <div class="field">
+    <%= f.label :ongoing %><br>
+    <%= f.check_box :ongoing %>
+  </div>
+  <div class="field">
+    <%= f.label :frequency %><br>
+    <%= f.text_field :frequency %>
+  </div>
+  <div class="field">
+    <%= f.label :message_content %><br>
+    <%= f.text_area :message_content %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

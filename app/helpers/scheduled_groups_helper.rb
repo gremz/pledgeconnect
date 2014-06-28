@@ -1,0 +1,2 @@
+module ScheduledGroupsHelper
+end

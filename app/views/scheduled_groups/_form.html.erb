@@ -1,0 +1,21 @@
+<%= form_for(@scheduled_group) do |f| %>
+  <% if @scheduled_group.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@scheduled_group.errors.count, "error") %> prohibited this scheduled_group from being saved:</h2>
+
+      <ul>
+      <% @scheduled_group.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :schedule_id %><br>
+    <%= f.number_field :schedule_id %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

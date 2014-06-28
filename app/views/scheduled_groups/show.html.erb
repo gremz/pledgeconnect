@@ -1,0 +1,9 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Schedule:</strong>
+  <%= @scheduled_group.schedule_id %>
+</p>
+
+<%= link_to 'Edit', edit_scheduled_group_path(@scheduled_group) %> |
+<%= link_to 'Back', scheduled_groups_path %>

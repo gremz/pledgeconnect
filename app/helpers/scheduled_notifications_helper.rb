@@ -1,0 +1,2 @@
+module ScheduledNotificationsHelper
+end

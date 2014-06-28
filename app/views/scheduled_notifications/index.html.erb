@@ -1,0 +1,37 @@
+<h1>Listing scheduled_notifications</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Provider</th>
+      <th>Start date</th>
+      <th>End date</th>
+      <th>Ongoing</th>
+      <th>Frequency</th>
+      <th>Message content</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @scheduled_notifications.each do |scheduled_notification| %>
+      <tr>
+        <td><%= scheduled_notification.provider_id %></td>
+        <td><%= scheduled_notification.start_date %></td>
+        <td><%= scheduled_notification.end_date %></td>
+        <td><%= scheduled_notification.ongoing %></td>
+        <td><%= scheduled_notification.frequency %></td>
+        <td><%= scheduled_notification.message_content %></td>
+        <td><%= link_to 'Show', scheduled_notification %></td>
+        <td><%= link_to 'Edit', edit_scheduled_notification_path(scheduled_notification) %></td>
+        <td><%= link_to 'Destroy', scheduled_notification, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Scheduled notification', new_scheduled_notification_path %>

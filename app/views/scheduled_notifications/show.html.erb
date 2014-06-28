@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Provider:</strong>
+  <%= @scheduled_notification.provider_id %>
+</p>
+
+<p>
+  <strong>Start date:</strong>
+  <%= @scheduled_notification.start_date %>
+</p>
+
+<p>
+  <strong>End date:</strong>
+  <%= @scheduled_notification.end_date %>
+</p>
+
+<p>
+  <strong>Ongoing:</strong>
+  <%= @scheduled_notification.ongoing %>
+</p>
+
+<p>
+  <strong>Frequency:</strong>
+  <%= @scheduled_notification.frequency %>
+</p>
+
+<p>
+  <strong>Message content:</strong>
+  <%= @scheduled_notification.message_content %>
+</p>
+
+<%= link_to 'Edit', edit_scheduled_notification_path(@scheduled_notification) %> |
+<%= link_to 'Back', scheduled_notifications_path %>

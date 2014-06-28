@@ -1,0 +1,29 @@
+<h1>Listing providers</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Token</th>
+      <th>Social data</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @providers.each do |provider| %>
+      <tr>
+        <td><%= provider.token %></td>
+        <td><%= provider.social_data %></td>
+        <td><%= link_to 'Show', provider %></td>
+        <td><%= link_to 'Edit', edit_provider_path(provider) %></td>
+        <td><%= link_to 'Destroy', provider, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Provider', new_provider_path %>
